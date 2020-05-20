@@ -4,7 +4,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-16.04'
   demands:
-  - npm
+    - npm
 
 variables:
   buildConfiguration: 'Release'
@@ -13,9 +13,8 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 3.1.100'
+  displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
   inputs:
-    packageType: sdk
     version: '$(dotnetSdkVersion)'
 
 - task: Npm@1
@@ -38,14 +37,6 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Debug'
-
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Release'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build the project - $(buildConfiguration)'
